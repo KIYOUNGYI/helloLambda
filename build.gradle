@@ -4,7 +4,9 @@ plugins {
 
 def log4jVersion = '2.17.1'
 def awsLambdaJavaLog4j2Version='1.5.1'
-
+def springCloudFunctionVersion = '3.2.1'
+def awsLambdaEventsVersion = '3.11.0'
+def awsLambdaCoreVersion = '1.2.1'
 group 'org.example'
 //version '1.0-SNAPSHOT'
 
@@ -13,11 +15,15 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
-    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
-    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+    implementation "com.amazonaws:aws-lambda-java-core:${awsLambdaCoreVersion}"
+    implementation "com.amazonaws:aws-lambda-java-events:${awsLambdaEventsVersion}"
 
     implementation "org.apache.logging.log4j:log4j-api:[${log4jVersion},)"
     implementation "org.apache.logging.log4j:log4j-core:[${log4jVersion},)"
@@ -25,6 +31,8 @@ dependencies {
     implementation "org.apache.logging.log4j:log4j-slf4j18-impl:[${log4jVersion},)"
     runtimeOnly "org.apache.logging.log4j:log4j-slf4j18-impl:${log4jVersion}"
     runtimeOnly "com.amazonaws:aws-lambda-java-log4j2:${awsLambdaJavaLog4j2Version}"
+
+    implementation "org.springframework.cloud:spring-cloud-function-adapter-aws:${springCloudFunctionVersion}"
 
 }
 //log4j 활용하려면 buildZip 방식으로 zip 파일 만들어서 배포하는게 필수
