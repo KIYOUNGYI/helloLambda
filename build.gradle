@@ -2,6 +2,9 @@ plugins {
     id 'java'
 }
 
+def log4jVersion = '2.17.1'
+def awsLambdaJavaLog4j2Version='1.5.1'
+
 group 'org.example'
 //version '1.0-SNAPSHOT'
 
@@ -13,7 +16,48 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+
+    implementation "org.apache.logging.log4j:log4j-api:[${log4jVersion},)"
+    implementation "org.apache.logging.log4j:log4j-core:[${log4jVersion},)"
+
+    implementation "org.apache.logging.log4j:log4j-slf4j18-impl:[${log4jVersion},)"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j18-impl:${log4jVersion}"
+    runtimeOnly "com.amazonaws:aws-lambda-java-log4j2:${awsLambdaJavaLog4j2Version}"
+
 }
+//log4j 활용하려면 buildZip 방식으로 zip 파일 만들어서 배포하는게 필수
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+}
+//ask packageFat(type: Zip) {
+//    from compileJava
+//    from processResources
+//    into('lib') {
+//        from configurations.runtimeClasspath
+//    }
+//    dirMode = 0755
+//    fileMode = 0755
+//}
+//
+//task packageLibs(type: Zip) {
+//    into('java/lib') {
+//        from configurations.runtimeClasspath
+//    }
+//    dirMode = 0755
+//    fileMode = 0755
+//}
+//
+//task packageSkinny(type: Zip) {
+//    from compileJava
+//    from processResources
+//}
+
 
 test {
     useJUnitPlatform()
